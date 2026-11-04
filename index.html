@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#030a10" />
+    <meta
+      name="description"
+      content="NEXUS — a one-tower tower defense game. Hold the core for 20 waves and reforge a single tower through six radically different forms."
+    />
+    <title>NEXUS — One Tower, Six Forms</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 9.5v13L16 30 3 22.5v-13L16 2Z' fill='%23051018' stroke='%235ff4ff' stroke-width='1.6'/%3E%3Cpath d='M16 8.5 23.5 13v6L16 23.5 8.5 19v-6L16 8.5Z' fill='none' stroke='%235ff4ff'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%235ff4ff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32">
+              <path d="M16 2 29 9.5v13L16 30 3 22.5v-13L16 2Z" fill="none" stroke="currentColor" stroke-width="1.4" />
+              <path d="M16 8.5 23.5 13v6L16 23.5 8.5 19v-6L16 8.5Z" fill="currentColor" opacity=".18" />
+              <path d="M16 8.5 23.5 13v6L16 23.5 8.5 19v-6L16 8.5Z" fill="none" stroke="currentColor" stroke-width="1" />
+              <circle cx="16" cy="16" r="3" fill="currentColor" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>NEXUS</h1>
+            <p>ONE TOWER · SIX FORMS</p>
+          </div>
+        </div>
+
+        <div class="hud" aria-label="Run status">
+          <div class="hud-stat hud-lives" id="hudLives">
+            <span class="hud-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3 20 6v5.5c0 4.7-3.2 8.2-8 9.5-4.8-1.3-8-4.8-8-9.5V6l8-3Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="hud-copy"><span class="hud-label">INTEGRITY</span><b id="livesValue">20</b></span>
+          </div>
+          <div class="hud-stat hud-gold">
+            <span class="hud-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m12 2 8 5.5v9L12 22l-8-5.5v-9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m12 7 4 2.8v4.4L12 17l-4-2.8V9.8L12 7Z" fill="currentColor" opacity=".35"/></svg>
+            </span>
+            <span class="hud-copy"><span class="hud-label">CREDITS</span><b id="goldValue">260</b></span>
+          </div>
+          <div class="hud-stat hud-wave">
+            <span class="hud-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M2 14h4l2.5-7 4 12 3-9 2 4h4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="hud-copy"><span class="hud-label">WAVE</span><b><span id="waveValue">00</span><i>/20</i></b></span>
+          </div>
+          <div class="hud-stat hud-score">
+            <span class="hud-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.2.9-4.5 4.3 1.1 6.1L12 17l-5.5 2.9 1.1-6.1-4.5-4.3 6.2-.9L12 3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="hud-copy"><span class="hud-label">SCORE</span><b id="scoreValue">0</b></span>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button class="icon-btn speed-btn" id="speedBtn" type="button" aria-label="Toggle game speed" title="Game speed">
+            <span id="speedText">1×</span>
+          </button>
+          <button class="icon-btn" id="soundBtn" type="button" aria-label="Toggle sound" title="Sound">
+            <svg class="sound-on" viewBox="0 0 24 24"><path d="M4 9.5h4L13 5v14L8 14.5H4v-5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <svg class="sound-off" viewBox="0 0 24 24"><path d="M4 9.5h4L13 5v14L8 14.5H4v-5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m16.5 9 5 6m0-6-5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <button class="icon-btn" id="helpBtn" type="button" aria-label="Open help" title="How to play (H)">
+            <span class="question">?</span>
+          </button>
+          <button class="icon-btn" id="pauseBtn" type="button" aria-label="Pause game" title="Pause (Space)">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="stage-column">
+          <div class="stage" id="stage">
+            <canvas id="gameCanvas" width="800" height="640" aria-label="Nexus defense arena"></canvas>
+            <div class="stage-scan" aria-hidden="true"></div>
+            <div class="stage-vignette" aria-hidden="true"></div>
+
+            <div class="boss-bar" id="bossBar" hidden>
+              <div class="boss-meta">
+                <span>THREAT DETECTED</span>
+                <b id="bossName">GOLIATH</b>
+                <em id="bossHpText">900</em>
+              </div>
+              <div class="boss-track"><i id="bossFill"></i></div>
+            </div>
+
+            <div class="wave-banner" id="waveBanner" aria-hidden="true">
+              <span id="bannerKicker">INCOMING</span>
+              <b id="bannerTitle">WAVE 01</b>
+              <em id="bannerSub">8 HOSTILES</em>
+            </div>
+
+            <div class="overdrive-pip" id="overdrivePip" hidden>
+              <span>OVERDRIVE</span><b id="overdriveTime">4.0s</b>
+            </div>
+
+            <div class="toasts" id="toasts" aria-live="polite"></div>
+
+            <div class="overlay intro-overlay" id="startOverlay">
+              <div class="intro-inner">
+                <div class="intro-kicker"><i></i> SINGULARITY DEFENSE PROTOCOL <i></i></div>
+                <h2 class="intro-title">NE<span>X</span>US</h2>
+                <p class="intro-sub">ONE TOWER. SIX FORMS. NO SECOND CHANCES.</p>
+                <p class="intro-copy">
+                  Hold the core for twenty waves. Reforge the tower mid-battle — each form is a
+                  different weapon, and every core level comes with it.
+                </p>
+                <div class="intro-forms" id="introForms" aria-hidden="true"></div>
+                <button class="primary-btn" id="startBtn" type="button">
+                  <span>INITIALIZE RUN</span>
+                  <em>20 WAVES · BOSS EVERY 5</em>
+                </button>
+                <div class="intro-meta">
+                  <span>KEYBOARD + TOUCH</span>
+                  <span>H FOR BRIEFING</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="overlay compact-overlay" id="pauseOverlay" hidden>
+              <div class="overlay-card">
+                <span class="overlay-kicker">SIMULATION HALTED</span>
+                <h2>SYSTEM PAUSED</h2>
+                <p>Take a breath. The hostiles will wait.</p>
+                <div class="overlay-actions">
+                  <button class="primary-btn small" id="resumeBtn" type="button"><span>RESUME</span></button>
+                  <button class="ghost-btn" id="pauseHelpBtn" type="button">BRIEFING</button>
+                  <button class="ghost-btn danger" id="pauseRestartBtn" type="button">RESTART RUN</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="overlay result-overlay" id="resultOverlay" hidden>
+              <div class="overlay-card result-card">
+                <span class="overlay-kicker" id="resultKicker">DEFENSE FAILED</span>
+                <h2 id="resultTitle">CORE BREACHED</h2>
+                <p id="resultCopy">The swarm broke through. The core went dark.</p>
+                <div class="result-stats">
+                  <div><span>WAVE</span><b id="resultWave">1</b></div>
+                  <div><span>KILLS</span><b id="resultKills">0</b></div>
+                  <div><span>SCORE</span><b id="resultScore">0</b></div>
+                  <div><span>BEST WAVE</span><b id="resultBest">1</b></div>
+                </div>
+                <div class="overlay-actions">
+                  <button class="primary-btn" id="restartBtn" type="button"><span>RUN IT BACK</span></button>
+                  <button class="ghost-btn" id="resultHelpBtn" type="button">BRIEFING</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-foot">
+            <span class="foot-live"><i></i> LIVE SIMULATION</span>
+            <span class="foot-keys"><kbd>1</kbd>–<kbd>6</kbd> REFORGE · <kbd>U</kbd> UPGRADE · <kbd>T</kbd> TARGET · <kbd>SPACE</kbd> PAUSE</span>
+          </div>
+        </section>
+
+        <aside class="panel" id="panel">
+          <section class="core-card" id="coreCard">
+            <div class="core-head">
+              <div class="core-glyph" id="coreGlyph" aria-hidden="true"></div>
+              <div class="core-title">
+                <span class="eyebrow">SINGULAR CORE</span>
+                <div class="core-name-row">
+                  <h2 id="coreName">PULSE</h2>
+                  <span class="role-chip" id="coreRole">RAPID</span>
+                </div>
+              </div>
+              <div class="level-chip"><span>LV</span><b id="levelValue">1</b></div>
+            </div>
+            <p class="core-desc" id="coreDesc">Twin emitters fire rapid homing bolts.</p>
+
+            <div class="stats-grid">
+              <div><span>DAMAGE</span><b id="statDamage">16</b></div>
+              <div><span>RATE</span><b id="statRate">3.33/s</b></div>
+              <div><span>RANGE</span><b id="statRange">265</b></div>
+              <div><span>DPS</span><b id="statDps">53</b></div>
+            </div>
+
+            <button class="upgrade-btn" id="upgradeBtn" type="button">
+              <span class="upgrade-label">UPGRADE CORE</span>
+              <span class="upgrade-note" id="upgradeNote">+33% DMG · +11 RNG</span>
+              <b class="upgrade-cost" id="upgradeCost">55</b>
+            </button>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-head">
+              <h3>REFORGE ARRAY</h3>
+              <span>LEVEL PERSISTS</span>
+            </div>
+            <div class="form-grid" id="formGrid"></div>
+            <p class="micro-note" id="reforgeNote">Swap form · triggers 4s overdrive</p>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-head">
+              <h3>TARGET PRIORITY</h3>
+              <span id="targetHint">closest to exit</span>
+            </div>
+            <div class="seg" id="targetRow" role="group" aria-label="Target priority"></div>
+          </section>
+
+          <section class="wave-panel">
+            <div class="wave-head">
+              <div>
+                <span class="eyebrow" id="waveEyebrow">NEXT DEPLOYMENT</span>
+                <h3 id="waveLabel">WAVE 01</h3>
+              </div>
+              <div class="wave-bonus">CLEAR <b id="bonusValue">+42</b></div>
+            </div>
+            <div class="wave-preview" id="wavePreview"></div>
+            <button class="wave-btn" id="waveBtn" type="button">
+              <span id="waveBtnLabel">DEPLOY WAVE 01</span>
+              <em id="waveBtnSub">8 HOSTILES</em>
+            </button>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <div class="help-modal" id="helpModal" hidden>
+      <div class="help-backdrop" data-close-help></div>
+      <div class="help-sheet" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="help-head">
+          <div>
+            <span class="eyebrow">FIELD MANUAL</span>
+            <h2 id="helpTitle">ONE CORE. SIX WEAPONS.</h2>
+          </div>
+          <button class="icon-btn" id="helpCloseBtn" type="button" aria-label="Close help">✕</button>
+        </div>
+        <div class="help-body">
+          <div class="help-columns">
+            <section>
+              <h3>THE LOOP</h3>
+              <p>
+                Enemies follow the marked lane. Anything that reaches the exit damages core
+                integrity. Upgrade the core, reforge its weapon, and choose a target priority.
+                Survive all 20 waves.
+              </p>
+              <h3>REFORGING</h3>
+              <p>
+                You only ever have one tower. Replacing its form keeps your upgrade level and
+                triggers a four-second <b>overdrive</b> (+35% fire rate). Form swap costs credits
+                and has a short cooldown — change weapons to fit the wave.
+              </p>
+              <h3>BURN &amp; CHILL</h3>
+              <p>
+                Blaze stacks a damage-over-time burn. Cryo slows targets and makes them take 30%
+                more damage from every source. Bosses resist slow.
+              </p>
+            </section>
+            <section>
+              <h3>FORMS</h3>
+              <div class="help-forms" id="helpForms"></div>
+            </section>
+          </div>
+          <div class="help-shortcuts">
+            <div><kbd>1</kbd>–<kbd>6</kbd><span>reforge form</span></div>
+            <div><kbd>U</kbd><span>upgrade core</span></div>
+            <div><kbd>T</kbd><span>cycle target priority</span></div>
+            <div><kbd>ENTER</kbd><span>deploy next wave</span></div>
+            <div><kbd>SPACE</kbd><span>pause / resume</span></div>
+            <div><kbd>M</kbd><span>mute sound</span></div>
+            <div><kbd>H</kbd><span>open this briefing</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
