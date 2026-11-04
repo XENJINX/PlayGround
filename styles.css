@@ -1751,6 +1751,52 @@ kbd {
 
 /* ---------------------------------------------------------------- responsive */
 
+/* Desktop: keep the whole arena above the fold on short laptop screens. */
+@media (min-width: 1001px) {
+  .stage {
+    width: min(100%, calc((100vh - 140px) * 1.25));
+    margin-inline: auto;
+  }
+
+  .panel {
+    max-height: calc(100vh - 128px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Short laptops: trim panel chrome so every control stays reachable. */
+@media (min-width: 1001px) and (max-height: 820px) {
+  .panel {
+    padding: 11px;
+  }
+
+  .panel-section {
+    padding-top: 9px;
+    margin-top: 9px;
+  }
+
+  .form-card {
+    min-height: 45px;
+    padding: 5px 7px;
+  }
+
+  .micro-note {
+    margin-top: 5px;
+  }
+
+  .wave-panel {
+    padding-top: 9px;
+    margin-top: 9px;
+  }
+
+  .wave-preview {
+    min-height: 21px;
+    margin: 7px 0;
+  }
+}
+
 @media (max-width: 1120px) {
   .layout {
     grid-template-columns: minmax(0, 1fr) 334px;
